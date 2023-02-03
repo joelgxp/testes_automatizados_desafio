@@ -124,7 +124,7 @@ public class CarroServiceTest {
         Carro carro = new Carro("azul", "fiat", "uno", 2020, 100);
 
         //quando
-        carroService.acelerar(carro, 100);
+        carroService.acelerar(carro, 80);
 
         //entao
         Assert.assertEquals(carro.getVelocidadeMaxima(), carro.getVelocidadeAtual());
