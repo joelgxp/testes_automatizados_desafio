@@ -2,12 +2,48 @@ package service;
 
 import model.Carro;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CarroServiceTest {
+
+    CarroService carroService;
+
+    @Before
+    public void setup() {
+        carroService = new CarroServiceImpl();
+
+    }
+
+    public void ligarUmCarroEnquantoEstiverDesligado() {
+
+        //dado
+        Carro carro = new Carro("prata", "fiat", "uno", 2020, 100);
+
+        //enquanto
+        carroService.ligar(carro);
+
+        //entao
+        Assert.assertTrue(carro.isLigado());
+        System.out.println(carroService.estadoAtual(carro));
+    }
+
     @Test
-    public void deveAcelerarCorretamtente() {
-        CarroService carroService = new CarroServiceImpl();
+    public void umCarroDeveDesligaQuandoEstiverLigado() {
+        //dado
+        Carro carro = new Carro("azul", "fiat", "uno", 2020, 100);
+
+        //enquanto
+        carroService.ligar(carro);
+        carroService.desligar(carro);
+
+        //entao
+        Assert.assertFalse(carro.isLigado());
+        System.out.println(carroService.estadoAtual(carro));
+    }
+
+    @Test
+    public void umCarroLigadoDeveAcelerar() {
 
         //dado
         Carro carro = new Carro("azul", "fiat", "uno", 2020, 150);
@@ -18,34 +54,82 @@ public class CarroServiceTest {
 
         //entao
         Assert.assertEquals(10, carro.getVelocidadeAtual());
+        System.out.println(carroService.estadoAtual(carro));
+
     }
 
     @Test
-    public void naoDevePassarDaVelocidadeMaxima (){
+    public void umCarroLigadoDeveFrear(){
         //dado
-        CarroService carroService = new CarroServiceImpl();
-        Carro carro = new Carro("azul", "fiat", "uno", 2020, 100);
+        Carro carro = new Carro("azul", "fiat", "uno", 2020, 150);
+
+        //enquanto
         carroService.ligar(carro);
+        carroService.acelerar(carro, 60);
+        carroService.frear(carro, 70);
+
+        //entao
+        Assert.assertTrue(carro.isLigado());
+        System.out.println(carroService.estadoAtual(carro));
+
+    }
+ @Test
+    public void umCarroDeveAcelerarSomenteLigado(){
+        //dado
+        Carro carro = new Carro("azul", "fiat", "uno", 2020, 150);
+
+        //enquanto
+        carroService.ligar(carro);
+        carroService.acelerar(carro, 60);
+
+        //entao
+        Assert.assertTrue(carro.isLigado());
+        System.out.println(carroService.estadoAtual(carro));
+
+    }
+    @Test
+    public void umCarroDeveFrearSomenteLigado(){
+        //dado
+        Carro carro = new Carro("azul", "fiat", "uno", 2020, 150);
+
+        //enquanto
+        carroService.ligar(carro);
+
+        carroService.frear(carro, 60);
+
+        //entao
+        Assert.assertTrue(carro.getVelocidadeAtual() == 0 && carro.isLigado());
+        System.out.println(carroService.estadoAtual(carro));
+
+    }
+
+    @Test
+    public void umCarroSoPodeDesligarQuandoEstiverTotalmenteParado(){
+        //dado
+        Carro carro = new Carro("azul", "fiat", "uno", 2020, 150);
+
+        //enquanto
+        carroService.ligar(carro);
+        carroService.acelerar(carro, 80);
+        carroService.frear(carro, 80);
+
+        //entao
+        Assert.assertEquals(0, carro.getVelocidadeAtual());
+        System.out.println(carroService.estadoAtual(carro));
+
+    }
+    @Test
+    public void naoDeveUltrapassarDaVelocidadeMaxima() {
+        //dado
+        Carro carro = new Carro("azul", "fiat", "uno", 2020, 100);
 
         //quando
-
-
-        //entao
-
-
-    }
-
-    @Test
-    public void umCarroDeveIniciarDesligado(){
-        CarroService carroService = new CarroServiceImpl();
-        Carro carro = new Carro("azul", "fiat", "uno", 2020, 100);
-        carroService.ligar(carro);
+        carroService.acelerar(carro, 100);
 
         //entao
-
-        //Assert.assertTrue();
-        Assert.assertFalse(carro.isLigado());
-
-
+        Assert.assertEquals(carro.getVelocidadeMaxima(), carro.getVelocidadeAtual());
+        System.out.println(carroService.estadoAtual(carro));
     }
+
+
 }
