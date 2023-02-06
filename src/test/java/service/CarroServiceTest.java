@@ -118,14 +118,16 @@ public class CarroServiceTest {
         System.out.println(carroService.estadoAtual(carro));
 
     }
+
     @Test
-    public void naoDeveUltrapassarDaVelocidadeMaxima() {
+    public void naoDeveTerVelocidadeNegativa() {
         //dado
         Carro carro = new Carro("azul", "fiat", "uno", 2020, 100);
 
         //quando
         carroService.ligar(carro);
         carroService.acelerar(carro, 80);
+        carroService.frear(carro,100);
 
         //entao
         Assert.assertTrue(carro.getVelocidadeAtual() < carro.getVelocidadeMaxima());
